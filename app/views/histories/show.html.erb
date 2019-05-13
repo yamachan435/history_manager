@@ -1,0 +1,56 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Console:</strong>
+  <%= @history.console %>
+</p>
+
+<p>
+  <strong>Process:</strong>
+  <%= @history.process %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @history.date %>
+</p>
+
+<p>
+  <strong>In station:</strong>
+  <%= @history.in_station %>
+</p>
+
+<p>
+  <strong>Out station:</strong>
+  <%= @history.out_station %>
+</p>
+
+<p>
+  <strong>Balance:</strong>
+  <%= @history.balance %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @history.amount %>
+</p>
+
+<p>
+  <strong>Link Status:</strong>
+  <%= @history.link_status %>
+</p>
+
+<p>
+  <strong>Linked at:</strong>
+  <%= @history.linked_at %>
+</p>
+
+<p>
+  <strong>Zaim ID:</strong>
+  <%= @history.zaim_id %>
+</p>
+
+<%= link_to 'Edit', edit_history_path(@history) %> |
+<%= link_to 'Link', link_history_path(@history), method: :post %> |
+<%= link_to 'Unlink', unlink_history_path(@history), method: :put %> |
+<%= link_to 'Back', histories_path %>

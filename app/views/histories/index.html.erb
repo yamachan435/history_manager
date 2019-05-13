@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Histories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Console</th>
+      <th>Process</th>
+      <th>Date</th>
+      <th>In station</th>
+      <th>Out station</th>
+      <th>Amount</th>
+      <th>Balance</th>
+      <th>Status</th>
+      <th>Linked at</th>
+      <th>Zaim ID</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @histories.each do |history| %>
+      <tr>
+        <td><%= history.console %></td>
+        <td><%= history.process %></td>
+        <td><%= history.date %></td>
+        <td><%= history.in_station %></td>
+        <td><%= history.out_station %></td>
+        <td><%= history.amount %></td>
+        <td><%= history.balance %></td>
+        <td><%= history.link_status %></td>
+        <td><%= history.linked_at %></td>
+        <td><%= history.zaim_id %></td>
+        <td><%= link_to 'Show', history %></td>
+        <td><%= link_to 'Edit', edit_history_path(history) %></td>
+        <td><%= link_to 'Destroy', history, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New History', new_history_path %>
