@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :users
   root 'toppages#index'
   resources :histories do
     post 'bulk_create', on: :collection

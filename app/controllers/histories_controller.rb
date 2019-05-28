@@ -21,7 +21,8 @@ class HistoriesController < ApplicationController
 
   def bulk_create
     req_json = JSON.parse(request.body.read)
-    req_json_rev = req_json.reverse
+    idm = req_json['idm']
+    req_json_rev = req_json['histories'].reverse
     
     reg_flg = false
     suc = 0
@@ -113,6 +114,6 @@ class HistoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def history_params
-      params.require(:history).permit(:console, :action, :date, :in_station_line, :in_station, :out_station_line, :out_station, :balance)
+      params.require(:history).permit(:console, :process, :date, :in_station, :out_station, :balance, :amount)
     end
 end

@@ -3,7 +3,7 @@ class History < ApplicationRecord
   
   MEMO_STRING = '[HM AutomaticInput]'
 
-  enum process: { train_fare: 1, charge: 2, bus_fare: 15, purchase: 70}
+  enum process: { train_fare: 1, charge: 2, bus_fare_2: 13, bus_fare: 15, purchase: 70}
   enum link_status: { unlinked: 0, linked: 1 }
 
   def ===(other)
@@ -58,6 +58,15 @@ class History < ApplicationRecord
           comment: "#{in_station}→#{out_station}",
         }
       elsif bus_fare?
+        { mapping: 1,
+          category_id: 103,
+          genre_id: 10303,
+          amount: amount,
+          date: date,
+          from_account_id: 6,
+          comment: '',
+        }
+      elsif bus_fare_2?
         { mapping: 1,
           category_id: 103,
           genre_id: 10303,
