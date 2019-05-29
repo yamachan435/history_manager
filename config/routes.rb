@@ -10,4 +10,11 @@ Rails.application.routes.draw do
   get 'callback' => 'toppages#callback'
   get 'login' => 'toppages#login'
   get 'money' => 'toppages#money'
+  namespace 'api' do
+    namespace 'v1' do
+      namespace 'user' do
+        post 'bulk_create_histories'
+      end
+    end
+  end
 end
