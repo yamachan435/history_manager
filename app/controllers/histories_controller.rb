@@ -38,7 +38,8 @@ class HistoriesController < ApplicationController
       json
     end
 
-    Rails.logger.info req_json_rev
+    req_json_rev.select!{|json| json['process'] != 0} 
+Rails.logger.info req_json_rev.inspect
     req_json_rev.each_with_index do |json, i|
       new_rec = History.new(json)
       if reg_flg
