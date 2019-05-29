@@ -58,22 +58,6 @@ module Zaim
       Rails.logger.info res.body.inspect
       return res.body
     end
-
-    def store(key, value)
-      File.open("tmp/tokens/#{key}", 'w') do |f|
-        f.puts value
-      end
-    end
-
-    def restore(key)
-      begin
-        File.open("tmp/tokens/#{key}", 'r') do |f|
-          return f.gets.chomp
-        end
-      rescue
-        return false
-      end
-    end
   end
 end
 
