@@ -3,7 +3,7 @@ COMMON: &COMMON
   zaim: ''
 
 development:
-  zaim_access: true
+  zaim_access: false
   <<: *COMMON
 
 test:
