@@ -20,10 +20,10 @@ class History < ApplicationRecord
       return false
     else
       money = charge? ? transfer : payment
-      self.linked!
       self.linked_at = Time.now.strftime("%F")
       self.zaim_id = money['money']['id']
       self.save!
+      self.linked!
       return true
     end
   end

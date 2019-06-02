@@ -24,8 +24,8 @@ module Zaim
   end
 
   class ApiAccessor
-    CONSUMER_KEY = APP_CONFIG['zaim']['consumer_key']
-    CONSUMER_SECRET = APP_CONFIG['zaim']['consumer_secret']
+    CONSUMER_KEY = ENV["ZAIM_CONSUMER_KEY"]
+    CONSUMER_SECRET = ENV["ZAIM_CONSUMER_SECRET"]
     CALLBACK_URL = 'http://192.168.0.2/callback'
     API_URL = 'https://api.zaim.net/v2/'
 
@@ -39,9 +39,6 @@ module Zaim
     end
 
     def access(method, path, body = nil)
-      Rails.logger.info path.inspect
-      Rails.logger.info body.inspect if body
-      Rails.logger.info @zaim_user.inspect
       @access_token = OAuth::AccessToken.new(@consumer, @zaim_user.access_token, @zaim_user.access_token_secret)
 
       if APP_CONFIG['zaim_access']
@@ -55,7 +52,6 @@ module Zaim
       else
         res = @access_token.send(method, url)
       end
-      Rails.logger.info res.body.inspect
       return res.body
     end
   end

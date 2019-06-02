@@ -1,0 +1,15 @@
+COMMON: &COMMON
+  author: "hoge"
+  zaim: ''
+
+development:
+  zaim_access: true
+  <<: *COMMON
+
+test:
+  zaim_access: false
+  <<: *COMMON
+
+production:
+  zaim_access: true
+  <<: *COMMON
