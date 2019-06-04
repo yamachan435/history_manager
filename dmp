@@ -1,0 +1,642 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE ar_internal_metadata (
+    key character varying NOT NULL,
+    value character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.ar_internal_metadata OWNER TO postgres;
+
+--
+-- Name: delayed_jobs; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE delayed_jobs (
+    id bigint NOT NULL,
+    priority integer DEFAULT 0 NOT NULL,
+    attempts integer DEFAULT 0 NOT NULL,
+    handler text NOT NULL,
+    last_error text,
+    run_at timestamp without time zone,
+    locked_at timestamp without time zone,
+    failed_at timestamp without time zone,
+    locked_by character varying,
+    queue character varying,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+ALTER TABLE public.delayed_jobs OWNER TO postgres;
+
+--
+-- Name: delayed_jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE delayed_jobs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.delayed_jobs_id_seq OWNER TO postgres;
+
+--
+-- Name: delayed_jobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE delayed_jobs_id_seq OWNED BY delayed_jobs.id;
+
+
+--
+-- Name: histories; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE histories (
+    id bigint NOT NULL,
+    console character varying,
+    process integer,
+    date date,
+    in_station character varying,
+    out_station character varying,
+    balance integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    link_status integer DEFAULT 0 NOT NULL,
+    linked_at date,
+    amount integer,
+    zaim_id bigint,
+    user_id integer
+);
+
+
+ALTER TABLE public.histories OWNER TO postgres;
+
+--
+-- Name: histories_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE histories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.histories_id_seq OWNER TO postgres;
+
+--
+-- Name: histories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE histories_id_seq OWNED BY histories.id;
+
+
+--
+-- Name: idms; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE idms (
+    id bigint NOT NULL,
+    idm character varying,
+    user_id bigint
+);
+
+
+ALTER TABLE public.idms OWNER TO postgres;
+
+--
+-- Name: idms_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE idms_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.idms_id_seq OWNER TO postgres;
+
+--
+-- Name: idms_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE idms_id_seq OWNED BY idms.id;
+
+
+--
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE schema_migrations (
+    version character varying NOT NULL
+);
+
+
+ALTER TABLE public.schema_migrations OWNER TO postgres;
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE users (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    email character varying DEFAULT ''::character varying NOT NULL,
+    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
+    reset_password_token character varying,
+    reset_password_sent_at timestamp without time zone,
+    remember_created_at timestamp without time zone
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO postgres;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE users_id_seq OWNED BY users.id;
+
+
+--
+-- Name: zaim_users; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE zaim_users (
+    id bigint NOT NULL,
+    access_token character varying NOT NULL,
+    access_token_secret character varying NOT NULL,
+    user_id integer
+);
+
+
+ALTER TABLE public.zaim_users OWNER TO postgres;
+
+--
+-- Name: zaim_users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE zaim_users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.zaim_users_id_seq OWNER TO postgres;
+
+--
+-- Name: zaim_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE zaim_users_id_seq OWNED BY zaim_users.id;
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY delayed_jobs ALTER COLUMN id SET DEFAULT nextval('delayed_jobs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY histories ALTER COLUMN id SET DEFAULT nextval('histories_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY idms ALTER COLUMN id SET DEFAULT nextval('idms_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY zaim_users ALTER COLUMN id SET DEFAULT nextval('zaim_users_id_seq'::regclass);
+
+
+--
+-- Data for Name: ar_internal_metadata; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY ar_internal_metadata (key, value, created_at, updated_at) FROM stdin;
+environment	production	2019-05-21 14:11:00.028139	2019-05-21 14:11:00.028139
+\.
+
+
+--
+-- Data for Name: delayed_jobs; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY delayed_jobs (id, priority, attempts, handler, last_error, run_at, locked_at, failed_at, locked_by, queue, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Name: delayed_jobs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('delayed_jobs_id_seq', 6, true);
+
+
+--
+-- Data for Name: histories; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY histories (id, console, process, date, in_station, out_station, balance, created_at, updated_at, link_status, linked_at, amount, zaim_id, user_id) FROM stdin;
+137	自販機	70	2019-06-03	None	None	8426	2019-06-04 14:45:39.633851	2019-06-04 14:45:40.513377	1	2019-06-04	150	3222645308	2
+138	自販機	70	2019-06-03	None	None	8316	2019-06-04 14:45:39.637575	2019-06-04 14:45:40.73527	1	2019-06-04	110	3222645310	2
+123	\N	70	2019-05-29	None	None	216	2019-06-02 16:05:45.813724	2019-06-02 16:26:49.605361	1	2019-06-02	216	3218125395	2
+124	自販機	70	2019-05-29	None	None	66	2019-06-02 16:05:45.833483	2019-06-02 16:26:50.014316	1	2019-06-02	150	3218125401	2
+125	\N	2	2019-05-30	白金高輪	鳥取	1066	2019-06-02 16:05:45.838548	2019-06-02 16:26:50.322662	1	2019-06-02	-1000	3218125410	2
+126	自販機	70	2019-05-30	None	None	926	2019-06-02 16:05:45.842796	2019-06-02 16:26:50.527664	1	2019-06-02	140	3218125412	2
+127	自販機	70	2019-05-31	None	None	776	2019-06-02 16:05:45.846437	2019-06-02 16:26:50.746349	1	2019-06-02	150	3218125415	2
+128	自販機	70	2019-05-31	None	None	636	2019-06-02 16:05:45.850145	2019-06-02 16:26:50.964265	1	2019-06-02	140	3218125417	2
+129	自販機	70	2019-05-31	None	None	256	2019-06-02 16:05:45.853143	2019-06-02 16:26:51.343631	1	2019-06-02	380	3218125422	2
+130	\N	2	2019-05-31	志木	鳥取	10256	2019-06-02 16:05:45.857036	2019-06-02 16:26:51.65082	1	2019-06-02	-10000	3218125428	2
+131	改札機	1	2019-05-31	北朝霞	三郷	9706	2019-06-02 16:05:45.860083	2019-06-02 16:26:51.818546	1	2019-06-02	550	3218125430	2
+132	\N	70	2019-06-01	None	None	9574	2019-06-02 16:05:45.863149	2019-06-02 16:26:52.019081	1	2019-06-02	132	3218125432	2
+133	改札機	1	2019-06-01	三郷	池袋	9024	2019-06-02 16:05:45.866144	2019-06-02 16:26:52.230556	1	2019-06-02	550	3218125434	2
+134	改札機	1	2019-06-02	北朝霞	武蔵浦和	8859	2019-06-02 16:05:45.868985	2019-06-02 16:26:52.43104	1	2019-06-02	165	3218125436	2
+135	\N	70	2019-06-02	None	None	8730	2019-06-02 16:05:45.872279	2019-06-02 16:26:52.6238	1	2019-06-02	129	3218125441	2
+136	改札機	1	2019-06-02	西浦和	北朝霞	8576	2019-06-02 16:05:45.876189	2019-06-02 16:26:52.880621	1	2019-06-02	154	3218125444	2
+63	改札機	1	2019-05-01	新宿	四ッ谷	1486	2019-05-21 14:11:07.734875	2019-05-21 14:11:07.734875	1	2019-05-02	165	3140982763	2
+64	\N	70	2019-05-02	None	None	1216	2019-05-21 14:11:07.737458	2019-05-21 14:11:07.737458	1	2019-05-04	270	3147429003	2
+65	自販機	70	2019-05-02	None	None	936	2019-05-21 14:11:07.740665	2019-05-21 14:11:07.740665	1	2019-05-04	280	3147429023	2
+66	改札機	1	2019-05-02	北朝霞	宮原	612	2019-05-21 14:11:07.744517	2019-05-21 14:11:07.744517	1	2019-05-04	324	3147429046	2
+67	自販機	70	2019-05-03	None	None	472	2019-05-21 14:11:07.747356	2019-05-21 14:11:07.747356	1	2019-05-04	140	3147429064	2
+68	自販機	70	2019-05-03	None	None	92	2019-05-21 14:11:07.750503	2019-05-21 14:11:07.750503	1	2019-05-04	380	3147429087	2
+69	精算機	2	2019-05-03	浦和	鳥取	5092	2019-05-21 14:11:07.753322	2019-05-21 14:11:07.753322	1	2019-05-04	-5000	3147429111	2
+70	改札機	1	2019-05-03	宮原	浦和	4855	2019-05-21 14:11:07.756126	2019-05-21 14:11:07.756126	1	2019-05-04	237	3147429148	2
+1	\N	\N	\N	\N	\N	146	2019-05-21 14:11:07.509206	2019-05-21 14:11:07.509206	1	\N	\N	\N	2
+2	\N	\N	\N	\N	\N	146	2019-05-21 14:11:07.512876	2019-05-21 14:11:07.512876	1	\N	\N	\N	2
+3	\N	\N	\N	\N	\N	146	2019-05-21 14:11:07.515632	2019-05-21 14:11:07.515632	1	\N	\N	\N	2
+4	\N	2	2019-03-16	上尾	鳥取	1146	2019-05-21 14:11:07.518323	2019-05-21 14:11:07.518323	1	2019-04-06	-1000	3080735133	2
+5	改札機	1	2019-03-16	上尾	北朝霞	736	2019-05-21 14:11:07.521554	2019-05-21 14:11:07.521554	1	2019-04-06	410	3080735152	2
+6	改札機	1	2019-03-17	志木	川越	489	2019-05-21 14:11:07.524429	2019-05-21 14:11:07.524429	1	2019-04-06	247	3080735182	2
+7	改札機	1	2019-03-17	川越	志木	242	2019-05-21 14:11:07.527401	2019-05-21 14:11:07.527401	1	2019-04-06	247	3080735206	2
+8	精算機	2	2019-03-20	京王堀之内	鳥取	1242	2019-05-21 14:11:07.53022	2019-05-21 14:11:07.53022	1	2019-04-06	-1000	3080735232	2
+9	改札機	1	2019-03-20	市ヶ谷	京王堀之内	708	2019-05-21 14:11:07.533206	2019-05-21 14:11:07.533206	1	2019-04-06	534	3080735252	2
+10	車載端末	15	2019-03-22	None	鳥取	633	2019-05-21 14:11:07.536232	2019-05-21 14:11:07.536232	1	2019-04-06	75	3080735272	2
+11	\N	1	2019-03-22	京王堀之内	新宿	273	2019-05-21 14:11:07.540832	2019-05-21 14:11:07.540832	1	2019-04-06	360	3080735288	2
+12	改札機	1	2019-03-22	新宿	四ツ谷	119	2019-05-21 14:11:07.544942	2019-05-21 14:11:07.544942	1	2019-04-06	154	3080735305	2
+13	乗継精算機	2	2019-03-28	新宿三丁目	鳥取	1119	2019-05-21 14:11:07.548585	2019-05-21 14:11:07.548585	1	2019-04-06	-1000	3080735319	2
+14	改札機	1	2019-03-28	四ッ谷	新宿三丁目	954	2019-05-21 14:11:07.552334	2019-05-21 14:11:07.552334	1	2019-04-06	165	3080735332	2
+15	改札機	1	2019-03-28	新宿三丁目	四ッ谷	789	2019-05-21 14:11:07.556016	2019-05-21 14:11:07.556016	1	2019-04-06	165	3080735344	2
+16	自販機	70	2019-03-29	None	None	409	2019-05-21 14:11:07.559526	2019-05-21 14:11:07.559526	1	2019-04-06	380	3080735353	2
+17	改札機	1	2019-03-29	白金高輪	目黒	244	2019-05-21 14:11:07.563828	2019-05-21 14:11:07.563828	1	2019-04-06	165	3080735368	2
+18	改札機	1	2019-03-29	目黒	池袋	50	2019-05-21 14:11:07.567523	2019-05-21 14:11:07.567523	1	2019-04-06	194	3080735388	2
+19	\N	2	2019-03-30	志木	鳥取	1050	2019-05-21 14:11:07.570935	2019-05-21 14:11:07.570935	1	2019-04-06	-1000	3080735401	2
+20	改札機	1	2019-03-30	北朝霞	浦和	834	2019-05-21 14:11:07.574194	2019-05-21 14:11:07.574194	1	2019-04-06	216	3080735418	2
+21	改札機	1	2019-03-30	浦和	宮原	597	2019-05-21 14:11:07.577871	2019-05-21 14:11:07.577871	1	2019-04-06	237	3080735431	2
+22	改札機	1	2019-03-31	宮原	北朝霞	273	2019-05-21 14:11:07.581519	2019-05-21 14:11:07.581519	1	2019-04-06	324	3080735445	2
+23	自販機	70	2019-04-04	None	None	133	2019-05-21 14:11:07.585095	2019-05-21 14:11:07.585095	1	2019-04-06	140	3080735462	2
+24	\N	2	2019-04-06	志木	鳥取	5133	2019-05-21 14:11:07.588798	2019-05-21 14:11:07.588798	1	2019-04-07	-5000	3082574909	2
+25	自販機	70	2019-04-07	None	None	4993	2019-05-21 14:11:07.59276	2019-05-21 14:11:07.59276	1	2019-04-08	140	3086412849	2
+26	改札機	1	2019-04-07	永田町	渋谷	4828	2019-05-21 14:11:07.596193	2019-05-21 14:11:07.596193	1	2019-04-08	165	3086412864	2
+27	改札機	1	2019-04-07	渋谷	学芸大学	4674	2019-05-21 14:11:07.600681	2019-05-21 14:11:07.600681	1	2019-04-08	154	3086412880	2
+28	改札機	1	2019-04-07	学芸大学	永田町	4355	2019-05-21 14:11:07.605846	2019-05-21 14:11:07.605846	1	2019-04-08	319	3086412898	2
+29	自販機	70	2019-04-08	None	None	4225	2019-05-21 14:11:07.610352	2019-05-21 14:11:07.610352	1	2019-04-08	130	3086412915	2
+30	自販機	70	2019-04-08	None	None	4095	2019-05-21 14:11:07.613951	2019-05-21 14:11:07.613951	1	2019-04-08	130	3086412922	2
+31	自販機	70	2019-04-10	None	None	3955	2019-05-21 14:11:07.617589	2019-05-21 14:11:07.617589	1	2019-04-18	140	3107716971	2
+32	自販機	70	2019-04-11	None	None	3835	2019-05-21 14:11:07.62101	2019-05-21 14:11:07.62101	1	2019-04-18	120	3107716978	2
+33	\N	70	2019-04-12	None	None	3455	2019-05-21 14:11:07.624401	2019-05-21 14:11:07.624401	1	2019-04-18	380	3107716983	2
+34	\N	70	2019-04-13	None	None	2982	2019-05-21 14:11:07.62782	2019-05-21 14:11:07.62782	1	2019-04-18	473	3107716986	2
+35	改札機	1	2019-04-13	和光市	池袋	2735	2019-05-21 14:11:07.631335	2019-05-21 14:11:07.631335	1	2019-04-18	247	3107716988	2
+36	自販機	70	2019-04-13	柳本	None	2585	2019-05-21 14:11:07.634979	2019-05-21 14:11:07.634979	1	2019-04-18	150	3107716989	2
+37	\N	70	2019-04-13	None	左京山	2145	2019-05-21 14:11:07.638973	2019-05-21 14:11:07.638973	1	2019-04-18	440	3107716993	2
+38	精算機	2	2019-04-13	小山	鳥取	7145	2019-05-21 14:11:07.643873	2019-05-21 14:11:07.643873	1	2019-04-18	-5000	3107716998	2
+39	改札機	1	2019-04-13	池袋	小山	5828	2019-05-21 14:11:07.647517	2019-05-21 14:11:07.647517	1	2019-04-18	1317	3107717001	2
+40	\N	70	2019-04-13	None	None	5598	2019-05-21 14:11:07.650979	2019-05-21 14:11:07.650979	1	2019-04-18	230	3107717007	2
+41	改札機	1	2019-04-13	小山	桐生	4626	2019-05-21 14:11:07.654778	2019-05-21 14:11:07.654778	1	2019-04-18	972	3107717017	2
+42	改札機	1	2019-04-14	桐生	北朝霞	2682	2019-05-21 14:11:07.658058	2019-05-21 14:11:07.658058	1	2019-04-18	1944	3107717023	2
+43	自販機	70	2019-04-17	None	None	2302	2019-05-21 14:11:07.661787	2019-05-21 14:11:07.661787	1	2019-04-18	380	3107717026	2
+44	自販機	70	2019-04-21	上横須賀	None	1195	2019-05-21 14:11:07.665586	2019-05-21 14:11:07.665586	1	2019-05-02	1107	3140982423	2
+45	改札機	1	2019-04-22	四ッ谷	新宿三丁目	1030	2019-05-21 14:11:07.669608	2019-05-21 14:11:07.669608	1	2019-05-02	165	3140982442	2
+46	改札機	1	2019-04-22	新宿	池袋	876	2019-05-21 14:11:07.673696	2019-05-21 14:11:07.673696	1	2019-05-02	154	3140982458	2
+47	自販機	70	2019-04-24	志井公園	None	736	2019-05-21 14:11:07.677881	2019-05-21 14:11:07.677881	1	2019-05-02	140	3140982473	2
+48	自販機	70	2019-04-26	None	None	596	2019-05-21 14:11:07.681993	2019-05-21 14:11:07.681993	1	2019-05-02	140	3140982485	2
+49	自販機	70	2019-04-26	None	None	456	2019-05-21 14:11:07.684966	2019-05-21 14:11:07.684966	1	2019-05-02	140	3140982492	2
+50	自販機	70	2019-04-26	None	None	316	2019-05-21 14:11:07.687852	2019-05-21 14:11:07.687852	1	2019-05-02	140	3140982502	2
+51	自販機	70	2019-04-27	None	香芝	156	2019-05-21 14:11:07.690871	2019-05-21 14:11:07.690871	1	2019-05-02	160	3140982522	2
+52	券売機	2	2019-04-29	桐生	鳥取	5156	2019-05-21 14:11:07.694282	2019-05-21 14:11:07.694282	1	2019-05-02	-5000	3140982543	2
+53	改札機	1	2019-04-29	桐生	栃木	4400	2019-05-21 14:11:07.697516	2019-05-21 14:11:07.697516	1	2019-05-02	756	3140982564	2
+54	自販機	70	2019-04-29	None	None	4260	2019-05-21 14:11:07.701936	2019-05-21 14:11:07.701936	1	2019-05-02	140	3140982578	2
+55	改札機	1	2019-04-29	栃木	大宮	3458	2019-05-21 14:11:07.705743	2019-05-21 14:11:07.705743	1	2019-05-02	802	3140982589	2
+56	\N	70	2019-04-29	None	None	3188	2019-05-21 14:11:07.715283	2019-05-21 14:11:07.715283	1	2019-05-02	270	3140982613	2
+57	改札機	1	2019-04-29	大宮	池袋	2800	2019-05-21 14:11:07.718172	2019-05-21 14:11:07.718172	1	2019-05-02	388	3140982634	2
+58	自販機	70	2019-04-30	None	None	2650	2019-05-21 14:11:07.72089	2019-05-21 14:11:07.72089	1	2019-05-02	150	3140982658	2
+59	改札機	1	2019-04-30	四ッ谷	新宿	2485	2019-05-21 14:11:07.723656	2019-05-21 14:11:07.723656	1	2019-05-02	165	3140982685	2
+60	改札機	1	2019-04-30	新宿	町田	2115	2019-05-21 14:11:07.726547	2019-05-21 14:11:07.726547	1	2019-05-02	370	3140982700	2
+61	改札機	1	2019-05-01	町田	玉川学園前	1991	2019-05-21 14:11:07.729373	2019-05-21 14:11:07.729373	1	2019-05-02	124	3140982725	2
+62	改札機	1	2019-05-01	玉川学園前	新宿	1651	2019-05-21 14:11:07.732135	2019-05-21 14:11:07.732135	1	2019-05-02	340	3140982746	2
+71	\N	70	2019-05-03	None	None	4585	2019-05-21 14:11:07.758854	2019-05-21 14:11:07.758854	1	2019-05-04	270	3147429180	2
+72	自販機	70	2019-05-03	None	None	4445	2019-05-21 14:11:07.761545	2019-05-21 14:11:07.761545	1	2019-05-04	140	3147429218	2
+73	改札機	1	2019-05-03	浦和	戸田	4280	2019-05-21 14:11:07.76423	2019-05-21 14:11:07.76423	1	2019-05-04	165	3147429241	2
+74	改札機	1	2019-05-03	戸田	北朝霞	4064	2019-05-21 14:11:07.767043	2019-05-21 14:11:07.767043	1	2019-05-04	216	3147429255	2
+75	自販機	70	2019-05-03	None	None	3474	2019-05-21 14:11:07.769804	2019-05-21 14:11:07.769804	1	2019-05-04	590	3147429273	2
+76	改札機	1	2019-05-04	北朝霞	浦和	3258	2019-05-21 14:11:07.773639	2019-05-21 14:11:07.773639	1	2019-05-04	216	3147429295	2
+77	改札機	1	2019-05-04	浦和	北朝霞	3042	2019-05-21 14:11:07.777637	2019-05-21 14:11:07.777637	1	2019-05-04	216	3147429307	2
+78	自販機	70	2019-05-05	None	None	2882	2019-05-21 14:11:07.780647	2019-05-21 14:11:07.780647	1	2019-05-07	160	3155914064	2
+79	改札機	1	2019-05-05	和光市	池袋	2635	2019-05-21 14:11:07.783358	2019-05-21 14:11:07.783358	1	2019-05-07	247	3155914084	2
+80	改札機	1	2019-05-05	池袋	新宿	2481	2019-05-21 14:11:07.786335	2019-05-21 14:11:07.786335	1	2019-05-07	154	3155914114	2
+81	改札機	1	2019-05-05	新宿三丁目	四ッ谷	2316	2019-05-21 14:11:07.789276	2019-05-21 14:11:07.789276	1	2019-05-07	165	3155914138	2
+82	自販機	70	2019-05-07	None	None	2186	2019-05-21 14:11:07.792004	2019-05-21 14:11:07.792004	1	2019-05-07	130	3155914162	2
+83	自販機	70	2019-05-07	None	None	1596	2019-05-21 14:11:07.794781	2019-05-21 14:11:07.794781	1	2019-05-07	590	3155914195	2
+84	自販機	70	2019-05-08	None	None	1066	2019-05-21 14:11:07.797438	2019-05-21 14:11:07.797438	1	2019-05-13	530	3170276077	2
+85	自販機	70	2019-05-08	None	None	926	2019-05-21 14:11:07.80017	2019-05-21 14:11:07.80017	1	2019-05-13	140	3170276093	2
+86	改札機	1	2019-05-10	大塚	池袋	793	2019-05-21 14:11:07.802886	2019-05-21 14:11:07.802886	1	2019-05-13	133	3170276116	2
+87	自販機	70	2019-05-11	None	None	653	2019-05-21 14:11:07.805838	2019-05-21 14:11:07.805838	1	2019-05-13	140	3170276129	2
+88	改札機	1	2019-05-11	志木	川越	406	2019-05-21 14:11:07.808617	2019-05-21 14:11:07.808617	1	2019-05-13	247	3170276145	2
+89	\N	70	2019-05-11	None	None	136	2019-05-21 14:11:07.811383	2019-05-21 14:11:07.811383	1	2019-05-13	270	3170276163	2
+90	\N	2	2019-05-11	川越	鳥取	5136	2019-05-21 14:11:07.813992	2019-05-21 14:11:07.813992	1	2019-05-13	-5000	3170276184	2
+91	改札機	1	2019-05-11	川越	志木	4889	2019-05-21 14:11:07.816734	2019-05-21 14:11:07.816734	1	2019-05-13	247	3170276203	2
+92	自販機	70	2019-05-12	None	None	4749	2019-05-21 14:11:07.819487	2019-05-21 14:11:07.819487	1	2019-05-13	140	3170276231	2
+93	改札機	1	2019-05-12	志木	池袋	4441	2019-05-21 14:11:07.822232	2019-05-21 14:11:07.822232	1	2019-05-13	308	3170276268	2
+94	改札機	1	2019-05-12	池袋	新大久保	4287	2019-05-21 14:11:07.824947	2019-05-21 14:11:07.824947	1	2019-05-13	154	3170276297	2
+95	改札機	1	2019-05-12	四ツ谷	新宿	4133	2019-05-21 14:11:07.827593	2019-05-21 14:11:07.827593	1	2019-05-13	154	3170276323	2
+96	改札機	1	2019-05-12	新宿三丁目	川越市	3588	2019-05-21 14:11:07.830197	2019-05-21 14:11:07.830197	1	2019-05-13	545	3170276335	2
+97	改札機	1	2019-05-13	川越市	志木	3341	2019-05-21 14:11:07.833024	2019-05-21 14:11:07.833024	1	2019-05-13	247	3170276356	2
+98	自販機	70	2019-05-13	None	None	3191	2019-05-21 14:11:07.835613	2019-05-21 14:11:07.835613	1	2019-05-13	150	3170276378	2
+99	改札機	1	2019-05-13	志木	白金高輪	2748	2019-05-21 14:11:07.838222	2019-05-21 14:11:07.838222	1	2019-05-13	443	3170276418	2
+100	自販機	70	2019-05-13	None	None	2618	2019-05-21 14:11:07.840778	2019-05-21 14:11:07.840778	1	2019-05-13	130	3170276441	2
+101	自販機	70	2019-05-15	None	None	2468	2019-05-21 14:11:07.84417	2019-05-21 14:11:07.84417	1	2019-05-19	150	3183689419	2
+102	自販機	70	2019-05-15	None	None	2069	2019-05-21 14:11:07.846892	2019-05-21 14:11:07.846892	1	2019-05-19	399	3183689485	2
+103	自販機	70	2019-05-15	None	None	1929	2019-05-21 14:11:07.850172	2019-05-21 14:11:07.850172	1	2019-05-19	140	3183689533	2
+104	自販機	70	2019-05-16	None	None	1339	2019-05-21 14:11:07.852993	2019-05-21 14:11:07.852993	1	2019-05-19	590	3183689579	2
+105	自販機	70	2019-05-16	一本松	None	1116	2019-05-21 14:11:07.856201	2019-05-21 14:11:07.856201	1	2019-05-19	223	3183689632	2
+106	自販機	70	2019-05-17	None	None	976	2019-05-21 14:11:07.859475	2019-05-21 14:11:07.859475	1	2019-05-19	140	3183689672	2
+107	車載端末	13	2019-05-17	None	鳥取	770	2019-05-21 14:11:07.862716	2019-05-21 14:11:07.862716	1	2019-05-19	206	3183701517	2
+108	自販機	70	2019-05-20	None	None	620	2019-05-21 14:11:07.865569	2019-05-21 14:11:07.865569	1	2019-05-20	150	3186695075	2
+109	自販機	70	2019-05-20	None	None	480	2019-05-21 14:11:07.868465	2019-05-21 14:11:07.868465	1	2019-05-20	140	3186695080	2
+121	自販機	70	2019-05-27	教会前	None	572	2019-05-28 14:46:37.130738	2019-05-28 14:46:43.781195	1	2019-05-28	140	3205658934	2
+110	自販機	70	2019-05-21	None	None	330	2019-05-21 15:43:48.875805	2019-05-21 16:12:12.849187	1	2019-05-21	150	3188869786	2
+114	\N	2	2019-05-26	志木	鳥取	3000	2019-05-28 14:46:37.108694	2019-05-28 14:46:41.930958	1	2019-05-28	-3000	3205658876	2
+111	自販機	70	2019-05-21	None	None	220	2019-05-21 15:43:48.879179	2019-05-21 16:12:13.004649	1	2019-05-21	110	3188869788	2
+116	自販機	70	2019-05-26	None	None	2462	2019-05-28 14:46:37.115044	2019-05-28 14:46:42.488294	1	2019-05-28	150	3205658888	2
+112	自販機	70	2019-05-22	None	None	70	2019-05-28 14:36:49.130064	2019-05-28 14:36:49.794206	1	2019-05-28	150	3205638264	2
+115	改札機	1	2019-05-26	北朝霞	越谷レイクタウン＋	2612	2019-05-28 14:46:37.112021	2019-05-28 14:46:42.204985	1	2019-05-28	388	3205658882	2
+113	自販機	198	2019-05-22	None	None	0	2019-05-28 14:36:49.14162	2019-05-28 14:39:12.106642	1	2019-05-28	70	3205643421	2
+118	自販機	70	2019-05-26	None	None	1412	2019-05-28 14:46:37.121872	2019-05-28 14:46:43.035849	1	2019-05-28	150	3205658912	2
+117	自販機	70	2019-05-26	None	None	1562	2019-05-28 14:46:37.118576	2019-05-28 14:46:42.792948	1	2019-05-28	900	3205658901	2
+120	自販機	70	2019-05-27	None	None	712	2019-05-28 14:46:37.127868	2019-05-28 14:46:43.610114	1	2019-05-28	150	3205658927	2
+119	改札機	1	2019-05-27	三郷	北朝霞	862	2019-05-28 14:46:37.124889	2019-05-28 14:46:43.338616	1	2019-05-28	550	3205658921	2
+122	自販機	70	2019-05-28	None	None	432	2019-05-28 14:46:37.133837	2019-05-28 14:46:44.159617	1	2019-05-28	140	3205658944	2
+\.
+
+
+--
+-- Name: histories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('histories_id_seq', 138, true);
+
+
+--
+-- Data for Name: idms; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY idms (id, idm, user_id) FROM stdin;
+1	01010a10e01a5703	2
+\.
+
+
+--
+-- Name: idms_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('idms_id_seq', 1, true);
+
+
+--
+-- Data for Name: schema_migrations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY schema_migrations (version) FROM stdin;
+20190403123738
+20190404124100
+20190404124405
+20190404135210
+20190404140620
+20190405130713
+20190405152400
+20190406053452
+20190519153321
+20190522105321
+20190522110152
+20190522110657
+20190522112027
+20190529113324
+20190529115103
+20190603130730
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY users (id, name, created_at, updated_at, email, encrypted_password, reset_password_token, reset_password_sent_at, remember_created_at) FROM stdin;
+1	yama	2019-06-02 16:00:21.005385	2019-06-02 16:00:21.005385			\N	\N	\N
+2	yama	2019-06-04 14:39:06.814891	2019-06-04 14:39:06.814891	caama435@gmail.com	$2a$11$nzxVtDQZtd/DCKVUvkmUZe99lKhimFlbvkkM30zPrP0RiW6FRMPcO	\N	\N	\N
+\.
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('users_id_seq', 2, true);
+
+
+--
+-- Data for Name: zaim_users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY zaim_users (id, access_token, access_token_secret, user_id) FROM stdin;
+1	v5ZnvFYLOY8lISbISGDJM7iw0Ma7b2037sHcHI3vDgatYmc36wtm0QsXCF78ror	JJDHwisBF3VlE831z6JEU1KyHsAfLRoJzCthqSexI4QKHxNRjy4dM3XxVOOGPOnLzBZPofBcA4IB4bqA	2
+\.
+
+
+--
+-- Name: zaim_users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('zaim_users_id_seq', 1, true);
+
+
+--
+-- Name: ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY ar_internal_metadata
+    ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: delayed_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY delayed_jobs
+    ADD CONSTRAINT delayed_jobs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: histories_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY histories
+    ADD CONSTRAINT histories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: idms_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY idms
+    ADD CONSTRAINT idms_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY schema_migrations
+    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: zaim_users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY zaim_users
+    ADD CONSTRAINT zaim_users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: delayed_jobs_priority; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX delayed_jobs_priority ON delayed_jobs USING btree (priority, run_at);
+
+
+--
+-- Name: index_histories_on_user_id; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX index_histories_on_user_id ON histories USING btree (user_id);
+
+
+--
+-- Name: index_idms_on_user_id; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX index_idms_on_user_id ON idms USING btree (user_id);
+
+
+--
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
+
+
+--
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
