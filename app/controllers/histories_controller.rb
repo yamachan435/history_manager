@@ -1,8 +1,9 @@
 class HistoriesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_history, only: [:show, :edit, :update, :destroy, :link, :unlink]
 
   def index
-    @histories = History.all
+    @histories = current_user.histories.order('id')
   end
 
   def show
