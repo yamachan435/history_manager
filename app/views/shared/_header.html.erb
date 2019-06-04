@@ -1,0 +1,8 @@
+<% if user_signed_in? %>
+  <header>
+    <%= link_to 'New History', new_history_path %> |
+    <%= link_to 'Link Pasmo', '' %> |
+    <%= link_to 'Link Zaim', '' %> |
+    <%= link_to 'Sign out', sign_out_path %> |
+  </header>
+<% end %>
