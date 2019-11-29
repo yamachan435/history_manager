@@ -19,7 +19,7 @@ class History < ApplicationRecord
     if linked?
       return false
     else
-      money = charge? ? transfer : payment
+      money = (charge? || bus_charge?) ? transfer : payment
       self.linked_at = Time.now.strftime("%F")
       self.zaim_id = money['money']['id']
       self.save!
@@ -32,7 +32,7 @@ class History < ApplicationRecord
     if !linked?
       return false
     else
-      charge? ? delete('transfer') : delete('payment')
+      (charge? || bus_charge?) ? delete('transfer') : delete('payment')
       self.unlinked!
       self.linked_at = nil
       self.zaim_id = nil
