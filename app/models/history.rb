@@ -3,7 +3,7 @@ class History < ApplicationRecord
   
   MEMO_STRING = '[HM AutomaticInput]'
 
-  enum process: { train_fare: 1, charge: 2, bus_fare_2: 13, bus_fare: 15, window: 25, bus_charge: 31, purchase: 70, point_charge: 72, purchase_2: 198}
+  enum process: { train_fare: 1, charge: 2, ticket: 3, bus_fare_2: 13, bus_fare: 15, window: 25, bus_charge: 31, purchase: 70, point_charge: 72, purchase_2: 198}
   enum link_status: { unlinked: 0, linked: 1 }
 
   belongs_to :user
@@ -73,6 +73,15 @@ class History < ApplicationRecord
           date: date,
           from_account_id: 6,
           comment: "#{in_station}→#{out_station}",
+        }
+      elsif ticket?
+        { mapping: 1,
+          category_id: 103,
+          genre_id: 10303,
+          amount: amount,
+          date: date,
+          from_account_id: 6,
+          comment: '',
         }
       elsif bus_fare?
         { mapping: 1,
